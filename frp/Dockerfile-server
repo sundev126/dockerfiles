@@ -1,0 +1,8 @@
+FROM alpine:3.8
+
+COPY frps /frps
+COPY frps.ini /frps.ini
+
+VOLUMN /frps.ini
+
+CMD [ "/frps", "-c", "/frps.ini"]
