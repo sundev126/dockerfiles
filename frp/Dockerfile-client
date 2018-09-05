@@ -1,0 +1,8 @@
+FROM alpine:3.8
+
+COPY frpc /frpc
+COPY frpc.ini /frpc.ini
+
+VOLUME /frpc.ini
+
+CMD [ "/frpc", "-c", "/frpc.ini"]
