@@ -15,7 +15,7 @@ RUN DEBIAN_FRONTEND=noninteractive set -ex \
  && apt-get -y upgrade \
  && apt-get install -y apt-transport-https \
  # 启用https
- && sed -i 's#http://deb.debian.org#https://mirrors.ustc.edu.cn#g' /etc/apt/sources.list \
+ && sed -i 's#http://mirrors.ustc.edu.cn#https://mirrors.ustc.edu.cn#g' /etc/apt/sources.list \
  && apt-get -y update \
  && apt-get -y upgrade \
  && apt-get install dialog \
@@ -35,7 +35,6 @@ RUN mkdir /var/run/sshd \
  && locale-gen en_US.UTF-8 \
  && update-locale LANG=en_US.UTF-8 \
  && chmod +x /usr/local/sbin/entrypoint.sh
-
 
 EXPOSE 22
 VOLUME [ "/home" ]
