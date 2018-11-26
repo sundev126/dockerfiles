@@ -13,7 +13,7 @@ RUN DEBIAN_FRONTEND=noninteractive set -ex \
  && sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list \
  && apt-get -y update \
  && apt-get -y upgrade \
- && apt-get install apt-transport-https \
+ && apt-get install -y apt-transport-https \
  # 启用https
  && sed -i 's#http://deb.debian.org#https://mirrors.ustc.edu.cn#g' /etc/apt/sources.list \
  && apt-get -y update \
