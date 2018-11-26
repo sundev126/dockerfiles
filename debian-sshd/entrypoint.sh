@@ -8,6 +8,7 @@ if [ $? -ne 0 ]; then
     useradd \
         --create-home \
         --no-user-group \
+		--shell /bin/bash \
         --password $(openssl passwd -1 $PASSWORD) \
         --groups users,sudo \
         $USERNAME
@@ -15,6 +16,10 @@ if [ $? -ne 0 ]; then
         https://raw.githubusercontent.com/sundev126/dotfiles/master/vim/vimrc \
         2>/dev/null
     chown $USERNAME /home/$USERNAME/.vimrc
+	curl -s -o /home/$USERNAME/.tmux.conf \
+        https://raw.githubusercontent.com/sundev126/dotfiles/master/tmux/tmux.conf \
+        2>/dev/null
+    chown $USERNAME /home/$USERNAME/.tmux.conf
 fi
 
 exec "$@"

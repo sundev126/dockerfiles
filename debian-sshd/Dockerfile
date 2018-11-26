@@ -40,3 +40,4 @@ RUN mkdir /var/run/sshd \
 EXPOSE 22
 VOLUME [ "/home" ]
 ENTRYPOINT [ "entrypoint.sh" ]
+CMD ["/usr/sbin/sshd", "-D" ]
