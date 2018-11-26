@@ -1,16 +1,27 @@
-FROM       debian:stretch
-MAINTAINER sundev "https://github.com/sundev126"
+FROM debian:stretch
+LABEL maintainer="https://github.com/sundev126"
 
-# 默认创建用户admin
+# 默认创建用户docker
 ENV USERNAME=docker \
     PASSWORD=docker
+    
 
+# 安装软件包
 RUN DEBIAN_FRONTEND=noninteractive set -ex \
+ # 使用中科大源
+ && cp /etc/apt/sources.list /etc/apt/sources.list.bak \
+ && sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list \
  && apt-get -y update \
  && apt-get -y upgrade \
- && apt-get install -y --allow-unauthenticated apt-utils dialog man-db locales openssh-server sudo \
-                       curl wget nano vim git telnet zsh aptitude tmux \
-                       bash-completion less htop\
+ && apt-get install apt-transport-https \
+ # 启用https
+ && sed -i 's#http://deb.debian.org#https://mirrors.ustc.edu.cn#g' /etc/apt/sources.list \
+ && apt-get -y update \
+ && apt-get -y upgrade \
+ && apt-get install dialog \
+ && apt-get install -y --allow-unauthenticated apt-utils man-db locales openssh-server sudo \
+                       curl wget nano vim git telnet aptitude tmux \
+                       bash-completion less htop ca-certificates \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -20,25 +31,11 @@ RUN mkdir /var/run/sshd \
  && sed -ri 's/^#PermitRootLogin(\s+.*)/PermitRootLogin\1/' /etc/ssh/sshd_config \
  && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
  && locale-gen en_US.UTF-8 \
- && update-locale LANG=en_US.UTF-8 \
- # 创建默认用户及home目录，并赋予sudo权限
- && useradd --create-home --user-group --shell /usr/bin/zsh --password $(openssl passwd -1 $PASSWORD) --groups sudo $USERNAME \
- ### START 设置默认用户的环境
- # 下载vim插件管理器vundle
- && su - $USERNAME -c "git clone https://github.com/VundleVim/Vundle.vim.git /home/$USERNAME/.vim/bundle/Vundle.vim" \
- # 安装oh-my-zsh
- &&  su - $USERNAME -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
- ### END
+ && update-locale LANG=en_US.UTF-8
 
 # 添加常用配置文件
-COPY vimrc /home/$USERNAME/.vimrc
-COPY tmux.conf /home/$USERNAME/.tmux.conf
-
-# 修复权限
-RUN chown $USERNAME:$USERNAME /home/$USERNAME/.vimrc \
- && chown $USERNAME:$USERNAME /home/$USERNAME/.tmux.conf
-
+COPY entrypoint.sh /usr/local/bin/
 
 EXPOSE 22
-
-CMD ["/usr/sbin/sshd", "-D"]
+VOLUME [ "/home" ]
+ENTRYPOINT [ "entrypoint.sh" ]
