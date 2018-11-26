@@ -25,16 +25,17 @@ RUN DEBIAN_FRONTEND=noninteractive set -ex \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+COPY entrypoint.sh /usr/local/sbin/
+
 # 创建sshd运行必须的目录
 RUN mkdir /var/run/sshd \
  # 设置root不能通过密码登录
  && sed -ri 's/^#PermitRootLogin(\s+.*)/PermitRootLogin\1/' /etc/ssh/sshd_config \
  && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
  && locale-gen en_US.UTF-8 \
- && update-locale LANG=en_US.UTF-8
+ && update-locale LANG=en_US.UTF-8 \
+ && chmod +x /usr/local/sbin/entrypoint.sh
 
-# 添加常用配置文件
-COPY entrypoint.sh /usr/local/bin/
 
 EXPOSE 22
 VOLUME [ "/home" ]
