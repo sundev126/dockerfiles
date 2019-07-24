@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 LABEL maintainer="https://github.com/sundev126"
 
 # 默认创建用户docker
