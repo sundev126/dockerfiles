@@ -13,15 +13,15 @@ RUN DEBIAN_FRONTEND=noninteractive set -ex \
  && sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list \
  && apt-get -y update \
  && apt-get -y upgrade \
- && apt-get install -y apt-transport-https \
+ && apt-get install -y apt-utils apt-transport-https ca-certificates \
  # 启用https
  && sed -i 's#http://mirrors.ustc.edu.cn#https://mirrors.ustc.edu.cn#g' /etc/apt/sources.list \
  && apt-get -y update \
  && apt-get -y upgrade \
  && apt-get install dialog \
- && apt-get install -y --allow-unauthenticated apt-utils man-db locales openssh-server sudo \
+ && apt-get install -y --allow-unauthenticated man-db locales openssh-server sudo \
                        curl wget nano vim git telnet aptitude tmux \
-                       bash-completion less htop ca-certificates \
+                       bash-completion less htop \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
