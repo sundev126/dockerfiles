@@ -25,7 +25,7 @@ RUN DEBIAN_FRONTEND=noninteractive set -ex \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY debian-sshd/entrypoint.sh /usr/local/sbin/
+COPY entrypoint.sh /usr/local/sbin/
 
 # 创建sshd运行必须的目录
 RUN mkdir /var/run/sshd \
