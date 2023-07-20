@@ -5,32 +5,16 @@ LABEL maintainer="https://github.com/sundev126"
 ENV USERNAME=docker \
     PASSWORD=docker
     
-# 使用清华源
-RUN cat > /etc/apt/sources.list <<_EOF_
-# 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main contrib non-free non-free-firmware
-
-deb http://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware
-
-deb http://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware
-# deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware
-
-deb https://mirrors.tuna.tsinghua.edu.cn/debian-security bookworm-security main contrib non-free non-free-firmware
-# # deb-src https://mirrors.tuna.tsinghua.edu.cn/debian-security bookworm-security main contrib non-free non-free-firmware
-
-# deb http://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware
-# deb-src https://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware
-_EOF_
-
 # 安装软件包
 RUN DEBIAN_FRONTEND=noninteractive set -ex \
+ # 使用中科大源
+ && cp /etc/apt/sources.list.d/debian.sources /etc/apt/sources.list.d/debian.sources.bak \
+ && sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources \
  && apt-get -y update \
  && apt-get -y upgrade \
  && apt-get install -y apt-utils apt-transport-https ca-certificates \
  # 启用https
- && sed -i 's#http://#https://#g' /etc/apt/sources.list \
+ && sed -i 's#http://#https://#g' /etc/apt/sources.list.d/debian.sources \
  && apt-get -y update \
  && apt-get -y upgrade \
  && apt-get install -y dialog \
