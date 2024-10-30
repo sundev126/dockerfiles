@@ -22,4 +22,4 @@ if [ $? -ne 0 ]; then
     chown $USERNAME /home/$USERNAME/.tmux.conf
 fi
 
-exec "$@"
+/init
