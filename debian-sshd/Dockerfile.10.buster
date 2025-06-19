@@ -18,6 +18,7 @@ RUN DEBIAN_FRONTEND=noninteractive set -ex \
                           curl wget nano vim git telnet aptitude tmux \
                           bash-completion less htop \
                           xz-utils cron \
+                          iproute2 iputils-ping traceroute dnsutils \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
